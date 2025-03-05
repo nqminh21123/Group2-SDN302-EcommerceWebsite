@@ -23,7 +23,6 @@ connectDB();
 
 app.use("/api/user", userRoutes);
 
-
 // root route
 app.get("/", (req, res) => res.send("Apps worked successfully"));
 
