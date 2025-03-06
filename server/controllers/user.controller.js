@@ -77,9 +77,9 @@ module.exports.login = async (req, res,next) => {
       });
     }
 
-   // const isPasswordValid = user(password, user.password);
+   const isPasswordValid = user.comparePassword(password, user.password);
       //console.log(isPasswordValid)
-    if (password!=user.password) {
+    if (!isPasswordValid) {
       return res.status(403).json({
         status: "fail",
         error: "Password is not correct",
@@ -115,7 +115,7 @@ exports.confirmEmail = async (req, res,next) => {
   try {
     const { token } = req.params;
     const user = await User.findOne({ confirmationToken: token });
-
+    console.log(user);
     if (!user) {
       return res.status(403).json({
         status: "fail",
@@ -139,7 +139,7 @@ exports.confirmEmail = async (req, res,next) => {
     await user.save({ validateBeforeSave: false });
 
     const accessToken = generateToken(user);
-
+    
     const { password: pwd, ...others } = user.toObject();
 
     res.status(200).json({
