@@ -11,6 +11,7 @@ const morgan = require("morgan");
 const globalErrorHandler = require("./middleware/global-error-handler");
 // routes
 const userRoutes = require("./routes/user.routes");
+const brandRoutes = require("./routes/brand.routes");
 const couponRoutes = require("./routes/coupon.routes");
 const categoryRoutes = require("./routes/category.routes");
 const productRoutes = require("./routes/product.routes");
@@ -24,6 +25,8 @@ app.use(express.static(path.join(__dirname, "public")));
 connectDB();
 
 app.use("/api/user", userRoutes);
+app.use("/api/brand", brandRoutes);
+
 app.use("/api/coupon", couponRoutes);
 app.use("/api/category", categoryRoutes);
 app.use("/api/product", productRoutes)

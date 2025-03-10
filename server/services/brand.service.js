@@ -22,10 +22,10 @@ exports.getBrandsService = async () => {
 }
 
 // get all Brands service
-exports.deleteBrandsService = async (id) => {
-  const brands = await Brand.findByIdAndDelete(id);
-  return brands;
-}
+exports.deleteBrandService = async (id) => {
+  const brand = await Brand.findByIdAndDelete(id);
+  return brand;
+};
 
 // update category
 exports.updateBrandService = async (id,payload) => {
@@ -46,3 +46,4 @@ exports.getSingleBrandService = async (id) => {
   const result = await Brand.findById(id);
   return result;
 }
+
