@@ -13,6 +13,7 @@ const globalErrorHandler = require("./middleware/global-error-handler");
 const userRoutes = require("./routes/user.routes");
 const couponRoutes = require("./routes/coupon.routes");
 const categoryRoutes = require("./routes/category.routes");
+const productRoutes = require("./routes/product.routes");
 // middleware
 app.use(cors());
 app.use(express.json());
@@ -25,6 +26,7 @@ connectDB();
 app.use("/api/user", userRoutes);
 app.use("/api/coupon", couponRoutes);
 app.use("/api/category", categoryRoutes);
+app.use("/api/product", productRoutes)
 // root route
 app.get("/", (req, res) => res.send("Apps worked successfully"));
 

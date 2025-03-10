@@ -1,6 +1,5 @@
 [
   {
-    "_id": "645f0b95af839230b4d5084a",
     "title": "August Gift Voucher",
     "logo": "https://i.ibb.co/kxGMcrw/ipad-1.png",
     "couponCode": "AUGUST23",
@@ -10,7 +9,6 @@
     "productType": "electronics"
   },
   {
-    "_id": "645f0b95af839230b4d5084b",
     "title": "SUMMER Vacation",
     "logo": "https://i.ibb.co/ThxGY6N/clothing-13.png",
     "couponCode": "SUMMER23",
@@ -20,7 +18,6 @@
     "productType": "fashion"
   },
   {
-    "_id": "645f0b95af839230b4d5084c",
     "title": "Paper On Demand",
     "logo": "https://i.ibb.co/h9PYFHJ/lip-liner-2.png",
     "couponCode": "PAPER12",
@@ -30,7 +27,6 @@
     "productType": "beauty"
   },
   {
-    "_id": "645f0b95af839230b4d5084d",
     "title": "Fifty Fifty",
     "logo": "https://i.ibb.co/rvmPWxc/bracelet-5.png",
     "couponCode": "FIF50",

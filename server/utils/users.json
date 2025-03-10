@@ -1,6 +1,5 @@
 [
   {
-    "_id": "645f7e130ba9d3c3ea50555a",
     "email": "paul@gmail.com",
     "role": "user",
     "name": "Paul R. Bruns",
@@ -15,7 +14,6 @@
     ]
   },
   {
-    "_id": "6461f490aae01ae021285ecb",
     "email": "linda@gmail.com",
     "role": "user",
     "name": "Linda",
@@ -28,7 +26,6 @@
     ]
   },
   {
-    "_id": "6465ac4d3322f9425ac8f444",
     "email": "james@gmail.com",
     "password": "223366",
     "role": "user",

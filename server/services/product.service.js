@@ -1,6 +1,7 @@
 const Brand = require("../model/Brand");
 const Category = require("../model/Category");
 const Product = require("../model/Products");
+const Reviews = require("../model/Review")
 
 // create product service
 exports.createProductService = async (data) => {
@@ -36,9 +37,14 @@ exports.addAllProductService = async (data) => {
 
 // get product data
 exports.getAllProductsService = async () => {
-  const products = await Product.find({}).populate("reviews");
+  const products = await Product.find().populate("reviews");
   return products;
 };
+
+exports.getProductByIdService = async (id) => {
+  const products = await Product.findById(id);
+  return products;
+}
 
 // get type of product service
 exports.getProductTypeService = async (req) => {
@@ -155,7 +161,7 @@ exports.getRelatedProductService = async (productId) => {
 };
 
 // update a product
-exports.updateProductService = async (id, currProduct) => {
+exports.updateProductService1 = async (id, currProduct) => {
 
   const product = await Product.findById(id);
   if (product) {
@@ -216,3 +222,17 @@ exports.deleteProduct = async (id) => {
   const result = await Product.findByIdAndDelete(id)
   return result;
 };
+
+//update product 
+exports.updateProductService = async (id, payload) => {
+  const isExist = await Product.findOne({ _id: id })
+
+  if (!isExist) {
+    throw new ApiError(404, 'Category not found !')
+  }
+
+  const result = await Product.findOneAndUpdate({ _id: id }, payload, {
+    new: true,
+  })
+  return result
+}
