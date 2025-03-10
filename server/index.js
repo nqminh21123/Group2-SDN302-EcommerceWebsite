@@ -11,7 +11,7 @@ const morgan = require('morgan')
 const globalErrorHandler = require("./middleware/global-error-handler");
 // routes
 const userRoutes = require("./routes/user.routes");
-
+const brandRoutes = require("./routes/brand.routes");
 // middleware
 app.use(cors());
 app.use(express.json());
@@ -22,6 +22,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 connectDB();
 
 app.use("/api/user", userRoutes);
+app.use("/api/brand", brandRoutes);
 
 // root route
 app.get("/", (req, res) => res.send("Apps worked successfully"));
