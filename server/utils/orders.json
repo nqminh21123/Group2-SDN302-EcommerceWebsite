@@ -1,6 +1,5 @@
 [
   {
-    "_id": "645f5c0a2143136895d1f477",
     "user": "6459dee18d3f535cd6997f07",
     "cart": [
       {
@@ -12,7 +11,6 @@
           "name": "Headphones",
           "id": "6419723bd7dc5155c04350d3"
         },
-        "_id": "641e887d05f9ee1717e1348a",
         "sku": "NTB7SDVX44",
         "img": "https://i.ibb.co/WVdTgR8/headphone-1.png",
         "title": "Headphones Wireless.",
