@@ -1,6 +1,6 @@
 [
   {
-    " _id": { "$oid": "6412eae89c2275a25d09541d"},
+    "_id": { "$oid": "6412eae89c2275a25d09541d"},
     "products": [{ "$oid": "641e887d05f9ee1717e1348a"}],
     "name": "Logitech",
     "description": "Logitech Business Support. Top Articles. Top Articles. Find Your Product. Search for your product by name, model number or part number.",

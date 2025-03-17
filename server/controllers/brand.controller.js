@@ -1,4 +1,3 @@
-const e = require('express');
 const Brand = require('../model/Brand');
 const brandService = require('../services/brand.service');
 
