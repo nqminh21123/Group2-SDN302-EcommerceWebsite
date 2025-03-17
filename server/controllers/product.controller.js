@@ -72,18 +72,18 @@ const createProduct = async (req, res, next) => {
     }
 };
 
-const reviewsProducts = async (req, res, next) => {
-    // try {
-    //     const result = await productServices.getReviewsProducts();
-    //     res.status(200).json({
-    //         status: "success",
-    //         data: result,
-    //     });
-    // } catch (error) {
-    //     console.log(error);
-    //     next(error);
-    // }
-}
+//product reviews
+const reviewProducts = async (req, res, next) => {
+    try {
+        const product = await productServices.getReviewsProducts(req.params.id)
+        res.status(200).json({
+            success: true,
+            data: product,
+        })
+    } catch (error) {
+        next(error)
+    }
+};
 
 module.exports = {
     getAllProduct,
@@ -91,5 +91,5 @@ module.exports = {
     deleteProduct,
     updateProduct,
     createProduct,
-    reviewsProducts,
+    reviewProducts,
 };

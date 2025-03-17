@@ -1,16 +1,18 @@
 [
   {
-    "user": "6459dee18d3f535cd6997f07",
+    "_id": { "$oid": "645f5c0a2143136895d1f477"},
+    "user": { "$oid": "6459dee18d3f535cd6997f07"},
     "cart": [
       {
         "brand": {
           "name": "Logitech",
-          "id": "6412eae89c2275a25d09541d"
+          "id": { "$oid": "6412eae89c2275a25d09541d"}
         },
         "category": {
           "name": "Headphones",
-          "id": "6419723bd7dc5155c04350d3"
+          "id": { "$oid": "6419723bd7dc5155c04350d3"}
         },
+        "_id": { "$oid": "641e887d05f9ee1717e1348a"},
         "sku": "NTB7SDVX44",
         "img": "https://i.ibb.co/WVdTgR8/headphone-1.png",
         "title": "Headphones Wireless.",

@@ -113,42 +113,6 @@ exports.getTopRatedProductService = async () => {
   return topRatedProducts;
 };
 
-
-// File path: services/productService.js
-
-/**
- * Get product data along with populated reviews and user details
- * @param {string} id - The ID of the product to retrieve
- * @returns {Object|null} - Returns the product object if found, otherwise null
- * @throws {Error} - Throws an error if the operation fails
- */
-exports.getProductService = async (id) => {
-  if (!id) {
-    console.error("Product ID is required");
-    throw new Error("Product ID is required");
-  }
-
-  try {
-    const product = await Product.findById(id).populate({
-      path: "reviews",
-      populate: { path: "userId", select: "name email imageURL" },
-    });
-    console.log(product);
-    if (!product) {
-      console.warn(`Product not found for ID: ${id}`);
-      return null;  // Return null if product is not found
-    }
-
-    console.log(`Product found: ${JSON.stringify(product, null, 2)}`);
-    return product;
-  } catch (error) {
-    console.error(`Error fetching product with ID ${id}:`, error.message);
-    throw new Error("Error fetching product data");
-  }
-};
-
-
-
 // get product data
 exports.getRelatedProductService = async (productId) => {
   const currentProduct = await Product.findById(productId);
@@ -160,70 +124,19 @@ exports.getRelatedProductService = async (productId) => {
   return relatedProducts;
 };
 
-// update a product
-exports.updateProductService1 = async (id, currProduct) => {
-
-  const product = await Product.findById(id);
-  if (product) {
-    product.title = currProduct.title;
-    product.brand.name = currProduct.brand.name;
-    product.brand.id = currProduct.brand.id;
-    product.category.name = currProduct.category.name;
-    product.category.id = currProduct.category.id;
-    product.sku = currProduct.sku;
-    product.img = currProduct.img;
-    product.slug = currProduct.slug;
-    product.unit = currProduct.unit;
-    product.imageURLs = currProduct.imageURLs;
-    product.tags = currProduct.tags;
-    product.parent = currProduct.parent;
-    product.children = currProduct.children;
-    product.price = currProduct.price;
-    product.discount = currProduct.discount;
-    product.quantity = currProduct.quantity;
-    product.status = currProduct.status;
-    product.productType = currProduct.productType;
-    product.description = currProduct.description;
-    product.additionalInformation = currProduct.additionalInformation;
-    product.offerDate.startDate = currProduct.offerDate.startDate;
-    product.offerDate.endDate = currProduct.offerDate.endDate;
-
-    await product.save();
-  }
-
-  return product;
-};
-
-
-
-// get Reviews Products
-exports.getReviewsProducts = async () => {
-  const result = await Product.find({
-    reviews: { $exists: true, $ne: [] },
-  })
-    .populate({
-      path: "reviews",
-      populate: { path: "userId", select: "name email imageURL" },
-    });
-
-  const products = result.filter(p => p.reviews.length > 0)
-
-  return products;
-};
-
 // get Reviews Products
 exports.getStockOutProducts = async () => {
   const result = await Product.find({ status: "out-of-stock" }).sort({ createdAt: -1 })
   return result;
 };
 
-// get Reviews Products
+// delete product
 exports.deleteProduct = async (id) => {
   const result = await Product.findByIdAndDelete(id)
   return result;
 };
 
-//update product 
+//update product
 exports.updateProductService = async (id, payload) => {
   const isExist = await Product.findOne({ _id: id })
 
@@ -236,3 +149,9 @@ exports.updateProductService = async (id, payload) => {
   })
   return result
 }
+
+// get Reviews Products
+exports.getReviewsProducts = async (id) => {
+  const result = await Product.findById(id).populate("reviews");
+  return result.reviews;
+};
