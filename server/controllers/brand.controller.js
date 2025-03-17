@@ -1,4 +1,3 @@
-const e = require('express');
 const Brand = require('../model/Brand');
 const brandService = require('../services/brand.service');
 
@@ -50,3 +49,15 @@ exports.getBrandById = async (req, res) => {
         res.status(400).json({message: err.message});
     }
 };
+
+exports.getActiveBrands = async (req,res,next) => {
+    try {
+      const result = await brandService.getBrandsService();
+      res.status(200).json({
+        success:true,
+        result,
+      })
+    } catch (error) {
+      next(error)
+    }
+  }

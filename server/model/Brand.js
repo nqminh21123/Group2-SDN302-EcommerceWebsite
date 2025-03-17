@@ -3,11 +3,7 @@ const validator = require("validator");
 const { ObjectId } = mongoose.Schema.Types;
 
 const brandSchema = mongoose.Schema({
-  logo: {
-    type: String,
-    required: false,
-    validate: [validator.isURL, "Please provide valid url(s)"]
-  },
+  
   name: {
     type: String,
     trim: true,
@@ -35,6 +31,11 @@ const brandSchema = mongoose.Schema({
     type: ObjectId,
     ref: "Products"
   }],
+  logo: {
+    type: String,
+    required: false,
+    validate: [validator.isURL, "Please provide valid url(s)"]
+  }
 }, {
   timestamps: true
 });
