@@ -13,5 +13,7 @@ router.put('/update/:id', brandController.updateBrand);
 router.delete('/delete/:id', brandController.deleteBrand);
 // get a brand by id
 router.get('/:id', brandController.getBrandById);
+// get Active Brands
+router.get('/active',brandController.getActiveBrands);
 
 module.exports = router;
