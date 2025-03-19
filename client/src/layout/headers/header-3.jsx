@@ -31,8 +31,8 @@ const HeaderThree = () => {
                 <div className="col-xl-2 col-lg-2 col-6">
                   <div className="logo">
                     <Link href="/">
-                      <Image className="logo-light" src={logo_white} alt="logo" />
-                      <Image className="logo-dark" src={logo_dark} alt="logo" />
+                      {/* <Image className="logo-light" src={logo_white} alt="logo" />
+                      <Image className="logo-dark" src={logo_dark} alt="logo" /> */}
                     </Link>
                   </div>
                 </div>

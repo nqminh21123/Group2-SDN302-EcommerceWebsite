@@ -1,13 +1,23 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const categoryController = require("../controllers/category.controller");
+// internal
+const categoryController = require('../controllers/category.controller');
 
-router.get("/get/:id", categoryController.getSingleCategory);
-router.post("/add", categoryController.addCategory);
-router.post("/add-all", categoryController.addAllCategory);
-router.get("/all", categoryController.getAllCategory);
-router.get("/show/:type", categoryController.getProductTypeCategory);
-router.get("/show", categoryController.getShowCategory);
-router.delete("/delete/:id", categoryController.deleteCategory);
-router.put("/edit/:id", categoryController.updateCategory);
+// get
+router.get('/get/:id', categoryController.getSingleCategory);
+// add
+router.post('/add', categoryController.addCategory);
+// add All Category
+router.post('/add-all', categoryController.addAllCategory);
+// get all Category
+router.get('/all', categoryController.getAllCategory);
+// get Product Type Category
+router.get('/show/:type', categoryController.getProductTypeCategory);
+// get Show Category
+router.get('/show', categoryController.getShowCategory);
+// delete category
+router.delete('/delete/:id', categoryController.deleteCategory);
+// delete product
+router.patch('/edit/:id', categoryController.updateCategory);
+
 module.exports = router;

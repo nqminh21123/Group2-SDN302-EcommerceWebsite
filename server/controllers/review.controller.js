@@ -1,10 +1,11 @@
 const mongoose = require("mongoose");
-const Review = require("../model/Review");
-const Product = require("../model/Products");
-const User = require("../model/User");
 const Order = require("../model/Order");
+const Products = require("../model/Products");
+const Review = require("../model/Review");
+const User = require("../model/User");
 
-const addReview = async (req, res, next) => {
+// add a review
+exports.addReview = async (req, res,next) => {
   const { userId, productId, rating, comment } = req.body;
   try {
     // Check if the user has already left a review for this product
@@ -18,12 +19,10 @@ const addReview = async (req, res, next) => {
         .status(400)
         .json({ message: "You have already left a review for this product." });
     }
-
     const checkPurchase = await Order.findOne({
       user: new mongoose.Types.ObjectId(userId),
       "cart._id": { $in: [productId] },
     });
-
     if (!checkPurchase) {
       return res
         .status(400)
@@ -33,8 +32,9 @@ const addReview = async (req, res, next) => {
     // Create the new review
     const review = await Review.create(req.body);
 
+
     // Add the review to the product's reviews array
-    const product = await Product.findById(productId);
+    const product = await Products.findById(productId);
     product.reviews.push(review._id);
     await product.save();
 
@@ -46,27 +46,21 @@ const addReview = async (req, res, next) => {
     return res.status(201).json({ message: "Review added successfully." });
   } catch (error) {
     console.log(error);
-    next(error);
+    next(error)
   }
 };
 
-const deleteReviews = async (req, res, next) => {
+// delete a review
+exports.deleteReviews = async (req, res,next) => {
   try {
     const productId = req.params.id;
-
-    const result = await Review.deleteMany({ productId: productId });
-    console.log(result);
+    const result = await Review.deleteMany({productId: productId });
     if (result.deletedCount === 0) {
-      return res.status(404).json({ error: "Product reviews not found" });
+      return res.status(404).json({ error: 'Product reviews not found' });
     }
-    res.json({ message: "All reviews deleted for the product" });
+    res.json({ message: 'All reviews deleted for the product' });
   } catch (error) {
     console.log(error);
-    next(error);
+    next(error)
   }
-};
-
-module.exports = {
-  addReview,
-  deleteReviews,
 };

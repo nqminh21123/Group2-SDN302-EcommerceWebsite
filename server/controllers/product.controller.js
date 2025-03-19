@@ -1,95 +1,200 @@
-const productServices = require('../services/product.service.js');
-const Product = require('../model/Products.js')
+const Brand = require("../model/Brand");
+const productServices = require("../service/product.service");
+const Product = require("../model/Products");
 
-//all product
-const getAllProduct = async (req, res, next) => {
-    try {
-        const result = await productServices.getAllProductsService();
-        res.status(200).json({
-            success: true,
-            result,
-        })
-    } catch (error) {
-        next(error);
-    }
+// add product
+exports.addProduct = async (req, res,next) => {
+
+  try {
+    const firstItem = {
+      color: {
+        name:'',
+        clrCode:''
+      },
+      img: req.body.img,
+    };
+    const imageURLs = [firstItem, ...req.body.imageURLs];
+    const result = await productServices.createProductService({
+      ...req.body,
+      imageURLs: imageURLs,
+    });
+
+
+ 
+    res.status(200).json({
+      success:true,
+      status: "success",
+      message: "Product created successfully!",
+      data: result,
+    });
+  } catch (error) {
+    console.log(error);
+    next(error)
+  }
 };
 
-//one product
-const getProductById = async (req, res, next) => {
-    try {
-        const id = req.params.id;
-        const product = await productServices.getProductByIdService(id);
-        res.status(200).json({
-            success: true,
-            product,
-        })
-    } catch (error) {
-        next(error);
-    }
+
+// add all product
+module.exports.addAllProducts = async (req,res,next) => {
+  try {
+    const result = await productServices.addAllProductService(req.body);
+    res.json({
+      message:'Products added successfully',
+      result,
+    })
+  } catch (error) {
+    next(error)
+  }
 }
 
-//delete product
-const deleteProduct = async (req, res, next) => {
-    try {
-        const id = req.params.id;
-        const result = await productServices.deleteProduct(id);
-        res.status(200).json({
-            success: true,
-            result,
-        })
-    } catch (error) {
-        next(error);
-    }
+// get all products
+exports.getAllProducts = async (req,res,next) => {
+  try {
+    const result = await productServices.getAllProductsService();
+    res.status(200).json({
+      success:true,
+      data:result,
+    })
+  } catch (error) {
+    next(error)
+  }
 }
 
-//update product
-const updateProduct = async (req, res, next) => {
-    try {
-        const id = req.params.id;
-        const productUpdate = req.body;
-        const result = await productServices.updateProductService(id, productUpdate);
-        res.status(200).json({
-            success: true,
-            result,
-        })
-    } catch (error) {
-        next(error);
-    }
+// get all products by type
+module.exports.getProductsByType = async (req,res,next) => {
+  try {
+    const result = await productServices.getProductTypeService(req);
+    res.status(200).json({
+      success:true, 
+      data:result,
+    })
+  } catch (error) {
+    console.log(error)
+    next(error)
+  }
 }
 
-const createProduct = async (req, res, next) => {
-    try {
-        const data = req.body;
-        const result = await productServices.createProductService(data);
-        res.status(200).json({
-            status: "success",
-            message: "Product created successfully!",
-            data: result,
-        });
-    } catch (error) {
-        console.log(error);
-        next(error);
+// get offer product controller
+module.exports.getOfferTimerProducts = async (req,res,next) => {
+  try {
+    const result = await productServices.getOfferTimerProductService(req.query.type);
+    res.status(200).json({
+      success:true, 
+      data:result,
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
+// get Popular Product By Type
+module.exports.getPopularProductByType = async (req,res,next) => {
+  try {
+    const result = await productServices.getPopularProductServiceByType(req.params.type);
+    res.status(200).json({
+      success:true, 
+      data:result,
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
+// get top rated Products
+module.exports.getTopRatedProducts = async (req,res,next) => {
+  try {
+    const result = await productServices.getTopRatedProductService();
+    res.status(200).json({
+      success:true, 
+      data:result,
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
+// getSingleProduct
+exports.getSingleProduct = async (req,res,next) => {
+  try {
+    if (!req.params.id) {
+      console.error("Product ID is required");
+      throw new Error("Product ID is required");
     }
+    console.log(req.params.id);
+    // const id = await productServices.getProductService(req.params.id);
+    const product = await Product.findById(req.params.id).populate({
+      path: "reviews",
+      populate: { path: "userId", select: "name email imageURL" },
+    });
+    
+    if (!product) {
+      console.warn(`Product not found for ID: ${id}`);
+      return null;  // Return null if product is not found
+    }
+    res.json(product)
+  } catch (error) {
+    next(error)
+  }
+}
+
+// get Related Product
+exports.getRelatedProducts = async (req,res,next) => {
+  try {
+    const products = await productServices.getRelatedProductService(req.params.id)
+    res.status(200).json({
+      success:true, 
+      data:products,
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
+// update product
+exports.updateProduct = async (req, res,next) => {
+  try {
+    const product = await productServices.updateProductService(req.params.id,req.body)
+    res.send({ data: product, message: "Product updated successfully!" });
+  } catch (error) {
+    next(error)
+  }
 };
 
-//product reviews
-const reviewProducts = async (req, res, next) => {
-    try {
-        const product = await productServices.getReviewsProducts(req.params.id)
-        res.status(200).json({
-            success: true,
-            data: product,
-        })
-    } catch (error) {
-        next(error)
-    }
+// update product
+exports.reviewProducts = async (req, res,next) => {
+  try {
+    const products = await productServices.getReviewsProducts()
+    res.status(200).json({
+      success:true, 
+      data:products,
+    })
+  } catch (error) {
+    next(error)
+  }
 };
 
-module.exports = {
-    getAllProduct,
-    getProductById,
-    deleteProduct,
-    updateProduct,
-    createProduct,
-    reviewProducts,
+// update product
+exports.stockOutProducts = async (req, res,next) => {
+  try {
+    const products = await productServices.getStockOutProducts();
+    res.status(200).json({
+      success:true, 
+      data:products,
+    })
+  } catch (error) {
+    next(error)
+  }
 };
+
+// update product
+exports.deleteProduct = async (req, res,next) => {
+  try {
+    await productServices.deleteProduct(req.params.id);
+    res.status(200).json({
+      message:'Product delete successfully'
+    })
+  } catch (error) {
+    next(error)
+  }
+};
+

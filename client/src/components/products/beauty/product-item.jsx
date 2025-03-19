@@ -92,7 +92,7 @@ const ProductItem = ({ product, prdCenter = false,primary_style=false }) => {
               className="tp-product-add-cart-btn-large"
               disabled={status === 'out-of-stock'}
             >
-              Add To Cart
+              Add To Cart 
             </button>
           )}
         </div>
