@@ -55,7 +55,7 @@ const Header = () => {
                 <div className="col-xl-2 col-lg-2 col-md-4 col-6">
                   <div className="logo">
                     <Link href="/">
-                      <Image src={logo} alt="logo" />
+                      {/* <Image src={logo} alt="logo" /> */}
                     </Link>
                   </div>
                 </div>
@@ -111,7 +111,7 @@ const Header = () => {
                       <div className="tp-header-contact-content">
                         <h5>Hotline:</h5>
                         <p>
-                          <a href="tel:966-595-035-008">+(966) 595 035 008</a>
+                          <a href="tel:966-595-035-008">+(84) 398347221 </a>
                         </p>
                       </div>
                     </div>
@@ -131,7 +131,7 @@ const Header = () => {
               <div className="col-xl-3 col-lg-3 col-md-3 col-6">
                 <div className="logo">
                   <Link href="/">
-                    <Image src={logo} alt="logo" />
+                    {/* <Image src={logo} alt="logo" /> */}
                   </Link>
                 </div>
               </div>

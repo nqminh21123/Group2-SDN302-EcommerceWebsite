@@ -41,7 +41,7 @@ const HeaderTwo = ({ style_2 = false }) => {
                       <a href="tel:402-763-282-46">
                         <span>
                           <PhoneTwo />
-                        </span> +(880) 1622097651
+                        </span> +(880) 39834221
                       </a>
                     </div>
                   </div>
@@ -62,7 +62,7 @@ const HeaderTwo = ({ style_2 = false }) => {
                   <div className="col-xl-2 col-lg-5 col-md-5 col-sm-4 col-6">
                     <div className="logo">
                       <Link href="/">
-                        <Image src={logo} alt="logo" priority />
+                        {/* <Image src={logo} alt="logo" priority /> */}
                       </Link>
                     </div>
                   </div>
