@@ -1,4 +1,4 @@
-const categoryServices = require("../service/category.service");
+const categoryServices = require("../services/category.service");
 
 
 // add category

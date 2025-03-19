@@ -1,5 +1,5 @@
 const Brand = require("../model/Brand");
-const productServices = require("../service/product.service");
+const productServices = require("../services/product.service");
 const Product = require("../model/Products");
 
 // add product

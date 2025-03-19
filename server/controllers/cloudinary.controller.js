@@ -1,5 +1,5 @@
 const fs = require("fs");
-const { cloudinaryServices } = require("../service/cloudinary.service");
+const { cloudinaryServices } = require("../services/cloudinary.service");
 
 // add image
 const saveImageCloudinary = async (req, res,next) => {
