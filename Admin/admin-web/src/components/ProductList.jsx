@@ -217,7 +217,12 @@ const ProductList = () => {
           <p className="text-muted">Tổng số: {products.length} sản phẩm</p>
         </Col>
         <Col xs="auto">
-          <Button variant="primary" className="d-flex align-items-center">
+          <Button
+            variant="primary"
+            className="d-flex align-items-center"
+            as={Link}
+            to={"/products/add"}
+          >
             <FaPlus className="me-2" /> Thêm sản phẩm mới
           </Button>
         </Col>

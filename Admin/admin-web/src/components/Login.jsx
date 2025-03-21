@@ -18,9 +18,13 @@ import {
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import "./styles/Admin.css";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../redux/slices/authSlice";
 
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -31,7 +35,6 @@ const Login = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loginError, setLoginError] = useState("");
 
-  // Xử lý thay đổi input
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
@@ -85,28 +88,11 @@ const Login = () => {
     setLoginError("");
 
     try {
-      // Mô phỏng API call
-      // Trong thực tế, bạn sẽ gọi API thực ở đây
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      // Demo kiểm tra email/password - thay bằng API thực tế của bạn
-      if (
-        formData.email === "admin@example.com" &&
-        formData.password === "admin123"
-      ) {
-        // Đăng nhập thành công
-        localStorage.setItem("adminToken", "demo-token-123456");
-        if (formData.rememberMe) {
-          localStorage.setItem("adminEmail", formData.email);
-        } else {
-          localStorage.removeItem("adminEmail");
-        }
-
-        // Chuyển hướng tới trang admin dashboard
-        navigate("/admin/dashboard");
-      } else {
-        // Đăng nhập thất bại
-        setLoginError("Email hoặc mật khẩu không chính xác");
+      const user_ = await dispatch(
+        loginUser({ email: formData.email, password: formData.password })
+      );
+      if (user_) {
+        navigate("/");
       }
     } catch (error) {
       setLoginError("Có lỗi xảy ra. Vui lòng thử lại sau.");

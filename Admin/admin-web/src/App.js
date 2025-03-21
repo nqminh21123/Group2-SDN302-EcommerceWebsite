@@ -1,11 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useNavigate,
+} from "react-router-dom";
+import { useSelector } from "react-redux";
 import ProductManagement from "./components/ProductManagement";
 import ProductList from "./components/ProductList";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
 import DashboardNavbar from "./components/NavBar";
+import AddProduct from "./components/AddProduct";
 import "./AppLayout.css";
+
+function ProtectedRoute({ element }) {
+  const auth = useSelector((state) => state.auth);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!auth?.user) {
+      navigate("/login");
+    }
+  }, [auth, navigate]);
+
+  return auth?.user ? element : null;
+}
 
 function App() {
   return (
@@ -16,27 +36,19 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route
             path="/"
-            element={
-              <main className="main-content">
-                <Dashboard />
-              </main>
-            }
+            element={<ProtectedRoute element={<Dashboard />} />}
           />
           <Route
             path="/products"
-            element={
-              <main className="main-content">
-                <ProductList />
-              </main>
-            }
+            element={<ProtectedRoute element={<ProductList />} />}
           />
           <Route
             path="/products/view/:id"
-            element={
-              <main className="main-content">
-                <ProductManagement />
-              </main>
-            }
+            element={<ProtectedRoute element={<ProductManagement />} />}
+          />
+          <Route
+            path="/products/add"
+            element={<ProtectedRoute element={<AddProduct />} />}
           />
         </Routes>
       </div>

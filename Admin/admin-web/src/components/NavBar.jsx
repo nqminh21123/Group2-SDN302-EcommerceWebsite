@@ -21,12 +21,21 @@ import {
 } from "lucide-react";
 import "./styles/Navbar.css";
 import { useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../redux/slices/authSlice";
 
 const DashboardNavbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [notificationCount, setNotificationCount] = useState(5);
   const [messageCount, setMessageCount] = useState(3);
+  const auth = useSelector((state) => state.auth);
+  const [user, setUser] = useState(auth?.user || null);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    setUser(auth?.user || null);
+  }, [auth]);
 
   const location = useLocation();
 
@@ -52,6 +61,12 @@ const DashboardNavbar = () => {
   if (isLoginPage) {
     return null;
   }
+
+  const handleLogout = () => {
+    if (window.confirm("Đăng xuất ?")) {
+      dispatch(logout());
+    }
+  };
 
   return (
     <Navbar
@@ -152,7 +167,9 @@ const DashboardNavbar = () => {
                     <User size={18} className="text-white" />
                   </div>
                   <div className="ms-2 d-none d-md-block text-start">
-                    <div className="fw-semibold text-white">Admin User</div>
+                    <div className="fw-semibold text-white">
+                      {user ? `${user.name} - ${user.role}` : ""}
+                    </div>
                   </div>
                 </Dropdown.Toggle>
 
@@ -166,16 +183,12 @@ const DashboardNavbar = () => {
                     <span>Settings</span>
                   </Dropdown.Item>
                   <Dropdown.Divider />
-                  <Dropdown.Item href="#" className="px-4 py-2 text-danger">
+                  <Dropdown.Item
+                    onClick={handleLogout}
+                    className="px-4 py-2 text-danger"
+                  >
                     <LogOut size={16} className="opacity-75 me-2" />
                     <span>Logout</span>
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    href="/login"
-                    className="px-4 py-2 text-success"
-                  >
-                    <LogIn size={16} className="opacity-75 me-2" />
-                    <span>Login</span>
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
