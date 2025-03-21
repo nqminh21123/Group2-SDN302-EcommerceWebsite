@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const bcrypt = require('bcryptjs');
+const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 
 const adminSchema = new mongoose.Schema(
@@ -49,26 +49,18 @@ const adminSchema = new mongoose.Schema(
       type: String,
       required: true,
       default: "Admin",
-      enum: [
-        "Admin",
-        "Super Admin",
-        "Manager",
-        "CEO",
-      ],
+      enum: ["Admin", "Super Admin", "Manager", "CEO"],
     },
     joiningDate: {
       type: Date,
       required: false,
     },
-    confirmationToken: String,
-    confirmationTokenExpires: Date,
   },
   {
-    timestamps: true, 
+    timestamps: true,
   }
 );
 
-// generateConfirmationToken
 adminSchema.methods.generateConfirmationToken = function () {
   const token = crypto.randomBytes(32).toString("hex");
   this.confirmationToken = token;
