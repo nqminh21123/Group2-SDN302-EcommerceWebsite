@@ -27,6 +27,10 @@ function ProtectedRoute({ element }) {
   return auth?.user ? element : null;
 }
 
+function MainContent({ children }) {
+  return <main className="main-content">{children}</main>;
+}
+
 function App() {
   return (
     <Router>
@@ -36,19 +40,51 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route
             path="/"
-            element={<ProtectedRoute element={<Dashboard />} />}
+            element={
+              <ProtectedRoute
+                element={
+                  <MainContent>
+                    <Dashboard />
+                  </MainContent>
+                }
+              />
+            }
           />
           <Route
             path="/products"
-            element={<ProtectedRoute element={<ProductList />} />}
+            element={
+              <ProtectedRoute
+                element={
+                  <MainContent>
+                    <ProductList />
+                  </MainContent>
+                }
+              />
+            }
           />
           <Route
             path="/products/view/:id"
-            element={<ProtectedRoute element={<ProductManagement />} />}
+            element={
+              <ProtectedRoute
+                element={
+                  <MainContent>
+                    <ProductManagement />
+                  </MainContent>
+                }
+              />
+            }
           />
           <Route
             path="/products/add"
-            element={<ProtectedRoute element={<AddProduct />} />}
+            element={
+              <ProtectedRoute
+                element={
+                  <MainContent>
+                    <AddProduct />
+                  </MainContent>
+                }
+              />
+            }
           />
         </Routes>
       </div>
