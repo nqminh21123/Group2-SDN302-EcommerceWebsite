@@ -1,17 +1,14 @@
 const Brand = require("../model/Brand");
 const Category = require("../model/Category");
 const Product = require("../model/Products");
-const Reviews = require("../model/Review")
+const Reviews = require("../model/Review");
 
 // create product service
 exports.createProductService = async (data) => {
   const product = await Product.create(data);
   const { _id: productId, brand, category } = product;
   //update Brand
-  await Brand.updateOne(
-    { _id: brand.id },
-    { $push: { products: productId } }
-  );
+  await Brand.updateOne({ _id: brand.id }, { $push: { products: productId } });
   //Category Brand
   await Category.updateOne(
     { _id: category.id },
@@ -44,7 +41,7 @@ exports.getAllProductsService = async () => {
 exports.getProductByIdService = async (id) => {
   const products = await Product.findById(id);
   return products;
-}
+};
 
 // get type of product service
 exports.getProductTypeService = async (req) => {
@@ -126,32 +123,64 @@ exports.getRelatedProductService = async (productId) => {
 
 // get Reviews Products
 exports.getStockOutProducts = async () => {
-  const result = await Product.find({ status: "out-of-stock" }).sort({ createdAt: -1 })
+  const result = await Product.find({ status: "out-of-stock" }).sort({
+    createdAt: -1,
+  });
   return result;
 };
 
 // delete product
 exports.deleteProduct = async (id) => {
-  const result = await Product.findByIdAndDelete(id)
+  const result = await Product.findByIdAndDelete(id);
   return result;
 };
 
 //update product
 exports.updateProductService = async (id, payload) => {
-  const isExist = await Product.findOne({ _id: id })
+  const isExist = await Product.findOne({ _id: id });
 
   if (!isExist) {
-    throw new ApiError(404, 'Category not found !')
+    throw new ApiError(404, "Category not found !");
   }
 
   const result = await Product.findOneAndUpdate({ _id: id }, payload, {
     new: true,
-  })
-  return result
-}
+  });
+  return result;
+};
 
 // get Reviews Products
 exports.getReviewsProducts = async (id) => {
   const result = await Product.findById(id).populate("reviews");
   return result.reviews;
+};
+
+exports.getProductWithRating = async (from, to) => {
+  const products = await Product.find()
+    .populate({
+      path: "reviews",
+      match: { rating: { $gte: from, $lte: to } },
+    })
+    .select("_id sku title reviews");
+  const filteredProducts = products.filter(
+    (product) => product.reviews.length > 0
+  );
+
+  return filteredProducts;
+};
+
+exports.getProductWithCategoryShow = async (req, res) => {
+  const listcategory = await Category.find({ status: "Show" });
+  const listConut = listcategory.map((category) => ({
+    id: category._id,
+    nameCate: category.productType,
+    count: category.products.length,
+  }));
+  return rs.json(
+    listConut.map((item) => ({
+      _id: item.id,
+      Category: item.nameCate,
+      Count: item.count,
+    }))
+  );
 };
