@@ -8,6 +8,7 @@ import {
   Col,
   Card,
   InputGroup,
+  Spinner,
 } from "react-bootstrap";
 import {
   FaTag,
@@ -23,6 +24,10 @@ import {
   FaImage,
   FaPlus,
   FaTrash,
+  FaCheck,
+  FaUpload,
+  FaSpeakap,
+  FaThList,
 } from "react-icons/fa";
 
 const AddProduct = () => {
@@ -30,6 +35,7 @@ const AddProduct = () => {
     brand: { name: "", id: "" },
     category: { name: "", id: "" },
     sku: "",
+    img: "",
     title: "",
     slug: "",
     unit: "",
@@ -42,6 +48,7 @@ const AddProduct = () => {
     productType: "",
     description: "",
     featured: false,
+    sellCount: 0,
     tags: [],
     additionalInformation: [{ key: "", value: "" }],
     imageURLs: [{ color: { name: "", clrCode: "" }, img: "" }],
@@ -50,6 +57,8 @@ const AddProduct = () => {
   const [brand, setBrand] = useState([]);
   const [category, setCategory] = useState([]);
   const [children, setChildren] = useState([]);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadingIndex, setUploadingIndex] = useState(null);
 
   useEffect(() => {
     const fetchBrand = async () => {
@@ -78,11 +87,13 @@ const AddProduct = () => {
   const [tag, setTag] = useState("");
   const [colorKey, setColorKey] = useState("");
   const [colorValue, setColorValue] = useState("");
+  const [productImage, setProductImage] = useState(null);
+  const [productImageUrl, setProductImageUrl] = useState("");
+  const [isUploadingProduct, setIsUploadingProduct] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setProduct({ ...product, [name]: value });
-    console.log(product);
   };
 
   const handleParentChange = (e) => {
@@ -96,7 +107,6 @@ const AddProduct = () => {
       children: "",
     });
     setChildren(selectedCate?.children || []);
-    console.log(product);
   };
 
   const handleChangeBrand = (e) => {
@@ -125,7 +135,6 @@ const AddProduct = () => {
     if (colorKey.trim() && colorValue.trim()) {
       const newColor = {
         color: { name: colorKey, clrCode: colorValue },
-        sizes: [],
         img: "",
       };
       setProduct({
@@ -137,10 +146,99 @@ const AddProduct = () => {
     }
   };
 
-  const handleColorImgChange = (index, value) => {
-    const updatedColors = [...product.imageURLs];
-    updatedColors[index].img = value;
-    setProduct({ ...product, imageURLs: updatedColors });
+  const handleColorImgChange = (index, e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const updatedColors = [...product.imageURLs];
+      updatedColors[index].file = file;
+      setProduct({ ...product, imageURLs: updatedColors });
+    }
+  };
+
+  const handleUploadImg = async (file) => {
+    if (!file) return null;
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const res = await axios.post(
+        "http://localhost:9999/api/cloudinary/add-img",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log("Upload response:", res.data);
+      return res.data.data.url;
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      return null;
+    }
+  };
+
+  const handleUploadSingleImage = async (index) => {
+    const colorItem = product.imageURLs[index];
+    if (!colorItem.file) {
+      alert("Please select an image file first");
+      return;
+    }
+
+    setIsUploading(true);
+    setUploadingIndex(index);
+
+    try {
+      const imageUrl = await handleUploadImg(colorItem.file);
+      if (imageUrl) {
+        const updatedColors = [...product.imageURLs];
+        updatedColors[index].img = imageUrl;
+        delete updatedColors[index].file;
+        setProduct({ ...product, imageURLs: updatedColors });
+        alert("Image uploaded successfully!");
+      } else {
+        alert("Failed to upload image. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error in upload process:", error);
+      alert("Error uploading image. Please try again.");
+    } finally {
+      setIsUploading(false);
+      setUploadingIndex(null);
+    }
+  };
+
+  const handleProductImageChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setProductImage(e.target.files[0]);
+    }
+  };
+
+  // Add a function to upload the product image
+  const handleUploadProductImage = async () => {
+    if (!productImage) {
+      alert("Please select an image first");
+      return;
+    }
+
+    setIsUploadingProduct(true);
+
+    try {
+      const imageUrl = await handleUploadImg(productImage);
+      if (imageUrl) {
+        setProductImageUrl(imageUrl);
+        setProduct({ ...product, img: imageUrl });
+        alert("Product image uploaded successfully!");
+      } else {
+        alert("Failed to upload product image. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error uploading product image:", error);
+      alert("Error uploading product image. Please try again.");
+    } finally {
+      setIsUploadingProduct(false);
+    }
   };
 
   const handleRemoveColor = (index) => {
@@ -171,10 +269,52 @@ const AddProduct = () => {
     setProduct({ ...product, additionalInformation: updatedInfo });
   };
 
-  const handleSubmit = (e) => {
+  const validateImageUrls = () => {
+    // Check if all images have been uploaded (have URLs)
+    for (let i = 0; i < product.imageURLs.length; i++) {
+      if (product.imageURLs[i].file && !product.imageURLs[i].img) {
+        alert(
+          `Please upload the image for ${
+            product.imageURLs[i].color.name || "unnamed color"
+          } before submitting`
+        );
+        return false;
+      }
+    }
+    return true;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Product to be added:", product);
-    // Add API call to save the product
+
+    if (!validateImageUrls()) {
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:9999/api/product/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(product),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        console.log(
+          `Product created successfully with SKU: ${result.data.sku}`
+        );
+        return result.data;
+      } else {
+        console.error(`Failed to add product: ${result.message}`);
+        return null;
+      }
+    } catch (error) {
+      console.error("Error adding product:", error);
+      return null;
+    }
   };
 
   return (
@@ -198,9 +338,10 @@ const AddProduct = () => {
                   </Form.Label>
                   <Form.Select
                     name="brand"
-                    value={product.brand}
+                    value={product.brand.id}
                     onChange={handleChangeBrand}
                   >
+                    <option value="">Select Brand</option>
                     {brand.map((bra, index) => (
                       <option key={index} value={bra._id}>
                         {bra.name}
@@ -218,7 +359,11 @@ const AddProduct = () => {
                           <FaList className="me-2" />
                           Parent Category
                         </Form.Label>
-                        <Form.Select onChange={handleParentChange}>
+                        <Form.Select
+                          name="parent"
+                          onChange={handleParentChange}
+                        >
+                          <option value="">Select Parent Category</option>
                           {category.map((ca, index) => (
                             <option key={index} value={ca._id}>
                               {ca.parent}
@@ -238,6 +383,7 @@ const AddProduct = () => {
                           name="children"
                           value={product.children}
                         >
+                          <option value="">Select Child Category</option>
                           {children.map((ca, index) => (
                             <option key={index} value={ca}>
                               {ca}
@@ -262,6 +408,54 @@ const AddProduct = () => {
                     placeholder="SKU"
                     onChange={handleInputChange}
                   />
+                </Form.Group>
+
+                <Form.Group className="mb-3">
+                  <Form.Label>
+                    <FaImage className="me-2" />
+                    Image
+                  </Form.Label>
+                  <InputGroup>
+                    <Form.Control
+                      type="file"
+                      onChange={handleProductImageChange}
+                    />
+                    <Button
+                      variant="outline-primary"
+                      onClick={handleUploadProductImage}
+                      disabled={isUploadingProduct || !productImage}
+                    >
+                      {isUploadingProduct ? (
+                        <Spinner
+                          as="span"
+                          animation="border"
+                          size="sm"
+                          role="status"
+                          aria-hidden="true"
+                        />
+                      ) : (
+                        <>
+                          <FaUpload className="me-1" /> Upload
+                        </>
+                      )}
+                    </Button>
+                  </InputGroup>
+                  {productImageUrl && (
+                    <div className="mt-2">
+                      <img
+                        src={productImageUrl}
+                        alt="Product Preview"
+                        style={{ maxHeight: "100px" }}
+                        className="border p-1"
+                      />
+                      <div className="mt-1">
+                        <small className="text-success">
+                          <FaCheck className="me-1" />
+                          Image Uploaded
+                        </small>
+                      </div>
+                    </div>
+                  )}
                 </Form.Group>
 
                 {/* Title */}
@@ -311,7 +505,7 @@ const AddProduct = () => {
 
                 {/* Price & Discount */}
                 <Row>
-                  <Col sm={4}>
+                  <Col sm={3}>
                     <Form.Group className="mb-3">
                       <Form.Label>
                         <FaDollarSign className="me-2" />
@@ -326,7 +520,7 @@ const AddProduct = () => {
                       />
                     </Form.Group>
                   </Col>
-                  <Col sm={4}>
+                  <Col sm={3}>
                     <Form.Group className="mb-3">
                       <Form.Label>
                         <FaPercent className="me-2" />
@@ -341,7 +535,22 @@ const AddProduct = () => {
                       />
                     </Form.Group>
                   </Col>
-                  <Col sm={4}>
+                  <Col sm={3}>
+                    <Form.Group className="mb-3">
+                      <Form.Label>
+                        <FaSpeakap className="me-2" />
+                        SellCount
+                      </Form.Label>
+                      <Form.Control
+                        type="number"
+                        name="sellCount"
+                        value={product.sellCount}
+                        placeholder="Sell Count"
+                        onChange={handleInputChange}
+                      />
+                    </Form.Group>
+                  </Col>
+                  <Col sm={3}>
                     <Form.Group className="mb-3">
                       <Form.Label>
                         <FaBoxes className="me-2" />
@@ -523,16 +732,41 @@ const AddProduct = () => {
                           />
                           <small>{item.color.name}</small>
                         </Col>
-                        <Col sm={7}>
+                        <Col sm={5}>
                           <Form.Control
                             type="file"
-                            placeholder="Image URL"
-                            value={item.img}
-                            onChange={(e) =>
-                              handleColorImgChange(index, e.target.value)
-                            }
+                            onChange={(e) => handleColorImgChange(index, e)}
                             size="sm"
                           />
+                          {item.img && (
+                            <div className="mt-1">
+                              <small className="text-success">
+                                <FaCheck className="me-1" />
+                                Uploaded
+                              </small>
+                            </div>
+                          )}
+                        </Col>
+                        <Col sm={2}>
+                          <Button
+                            variant="outline-primary"
+                            size="sm"
+                            onClick={() => handleUploadSingleImage(index)}
+                            disabled={isUploading && uploadingIndex === index}
+                            className="w-100"
+                          >
+                            {isUploading && uploadingIndex === index ? (
+                              <Spinner
+                                as="span"
+                                animation="border"
+                                size="sm"
+                                role="status"
+                                aria-hidden="true"
+                              />
+                            ) : (
+                              <FaImage />
+                            )}
+                          </Button>
                         </Col>
                         <Col sm={2}>
                           <Button
@@ -553,7 +787,7 @@ const AddProduct = () => {
                 <Form.Group className="mb-3">
                   <Form.Label className="d-flex justify-content-between align-items-center">
                     <span>
-                      <FaInfo className="me-2" />
+                      <FaThList className="me-2" />
                       Additional Information
                     </span>
                     <Button
