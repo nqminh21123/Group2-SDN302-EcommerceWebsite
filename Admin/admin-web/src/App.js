@@ -13,6 +13,7 @@ import Dashboard from "./components/Dashboard";
 import DashboardNavbar from "./components/NavBar";
 import AddProduct from "./components/AddProduct";
 import "./AppLayout.css";
+import OrderList from "./components/Order";
 
 function ProtectedRoute({ element }) {
   const auth = useSelector((state) => state.auth);
@@ -86,6 +87,20 @@ function App() {
               />
             }
           />
+          <Route
+            path="/orders"
+            element={
+              <ProtectedRoute
+                element={
+                  <MainContent>
+                    <OrderList/>
+                  </MainContent>
+
+                }
+              />
+            }
+          />
+            
         </Routes>
       </div>
     </Router>
