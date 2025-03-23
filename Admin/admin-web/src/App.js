@@ -12,6 +12,7 @@ import Cloudinary from "./components/Cloudinary";
 import Dashboard from "./components/Dashboard";
 import Login from "./components/Login";
 import DashboardNavbar from "./components/NavBar";
+import OrderList from "./components/Order";
 import ProductList from "./components/ProductList";
 import ProductManagement from "./components/ProductManagement";
 
@@ -94,6 +95,18 @@ function App() {
                 element={
                   <MainContent>
                     <Cloudinary />
+                  </MainContent>
+                }
+              />
+            }
+          />
+          <Route
+            path="/order"
+            element={
+              <ProtectedRoute
+                element={
+                  <MainContent>
+                    <OrderList />
                   </MainContent>
                 }
               />

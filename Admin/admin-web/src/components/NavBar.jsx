@@ -115,8 +115,8 @@ const DashboardNavbar = () => {
             <Nav.Link href="#" className="fw-medium px-3">
               Customers
             </Nav.Link>
-            <Nav.Link href="#" className="fw-medium px-3">
-              Analytics
+            <Nav.Link href="/orders" className="fw-medium px-3">
+              Orders
             </Nav.Link>
             <Nav.Link href="#" className="fw-medium px-3">
               Reports
