@@ -3,6 +3,7 @@ const { cloudinaryServices } = require("../services/cloudinary.service");
 
 // add image
 const saveImageCloudinary = async (req, res, next) => {
+
   try {
     const result = await cloudinaryServices.cloudinaryImageUpload(
       req.file.buffer
@@ -41,9 +42,9 @@ const addMultipleImageCloudinary = async (req, res) => {
       data:
         uploadResults.length > 0
           ? uploadResults.map((res) => ({
-              url: res.secure_url,
-              id: res.public_id,
-            }))
+            url: res.secure_url,
+            id: res.public_id,
+          }))
           : [],
     });
   } catch (err) {

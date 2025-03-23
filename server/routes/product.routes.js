@@ -14,7 +14,7 @@ router.get("/offer", productController.getOfferTimerProducts);
 // top rated products
 router.get("/top-rated", productController.getTopRatedProducts);
 // reviews products
-router.get("/review-product", productController.reviewProducts);
+router.get('/review-product/:id', productController.reviewProducts);
 // get popular products by type
 router.get("/popular/:type", productController.getPopularProductByType);
 // get Related Products
@@ -24,10 +24,10 @@ router.get("/single-product/:id", productController.getSingleProduct);
 // stock Product
 router.get("/stock-out", productController.stockOutProducts);
 // get Single Product
-router.patch("/edit-product/:id", productController.updateProduct);
+router.put("/edit-product/:id", productController.updateProduct);
 // get Products ByType
-router.get("/:type", productController.getProductsByType);
+router.get('/:type', productController.getProductsByType);
 // get Products ByType
-router.delete("/:id", productController.deleteProduct);
+router.delete('/:id', productController.deleteProduct);
 
 module.exports = router;
