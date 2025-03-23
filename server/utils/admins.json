@@ -1,0 +1,179 @@
+[
+    {
+        "_id": {
+            "$oid": "67dc181b95658640edda0e35"
+        },
+        "name": "John Doe",
+        "image": "https://example.com/profiles/john.jpg",
+        "address": "123 Main Street",
+        "country": "United States",
+        "city": "New York",
+        "email": "john.doe@example.com",
+        "phone": "+1-555-123-4567",
+        "status": "Active",
+        "password": "$2a$10$0scZ4i9xdXH2H4l5XDEcp.4lwKRB5.0uEv1VfYKJtj/Xp7URg9o7y",
+        "role": "Super Admin",
+        "joiningDate": "2023-01-15T00:00:00.000Z"
+    },
+    {
+        "_id": {
+            "$oid": "67dc181b95658640edda0e36"
+        },
+        "name": "Jane Smith",
+        "image": "https://example.com/profiles/jane.jpg",
+        "address": "456 Park Avenue",
+        "country": "United States",
+        "city": "Boston",
+        "email": "jane.smith@example.com",
+        "phone": "+1-555-987-6543",
+        "status": "Active",
+        "password": "$2a$10$0scZ4i9xdXH2H4l5XDEcp.4lwKRB5.0uEv1VfYKJtj/Xp7URg9o7y",
+        "role": "Admin",
+        "joiningDate": "2023-02-20T00:00:00.000Z"
+    },
+    {
+        "_id": {
+            "$oid": "67dc181b95658640edda0e37"
+        },
+        "name": "Robert Johnson",
+        "image": "https://example.com/profiles/robert.jpg",
+        "address": "789 Oak Road",
+        "country": "Canada",
+        "city": "Toronto",
+        "email": "robert.johnson@example.com",
+        "phone": "+1-555-456-7890",
+        "status": "Active",
+        "password": "$2a$10$0scZ4i9xdXH2H4l5XDEcp.4lwKRB5.0uEv1VfYKJtj/Xp7URg9o7y",
+        "role": "Manager",
+        "joiningDate": "2023-03-10T00:00:00.000Z"
+    },
+    {
+        "_id": {
+            "$oid": "67dc181b95658640edda0e38"
+        },
+        "name": "Emily Davis",
+        "image": "https://example.com/profiles/emily.jpg",
+        "address": "321 Pine Street",
+        "country": "United Kingdom",
+        "city": "London",
+        "email": "emily.davis@example.com",
+        "phone": "+44-20-1234-5678",
+        "status": "Active",
+        "password": "$2a$10$0scZ4i9xdXH2H4l5XDEcp.4lwKRB5.0uEv1VfYKJtj/Xp7URg9o7y",
+        "role": "CEO",
+        "joiningDate": "2023-01-05T00:00:00.000Z"
+    },
+    {
+        "_id": {
+            "$oid": "67dc181b95658640edda0e39"
+        },
+        "name": "Michael Wilson",
+        "image": "https://example.com/profiles/michael.jpg",
+        "address": "654 Elm Street",
+        "country": "Australia",
+        "city": "Sydney",
+        "email": "michael.wilson@example.com",
+        "phone": "+61-2-9876-5432",
+        "status": "Inactive",
+        "password": "$2a$10$0scZ4i9xdXH2H4l5XDEcp.4lwKRB5.0uEv1VfYKJtj/Xp7URg9o7y",
+        "role": "Admin",
+        "joiningDate": "2023-04-15T00:00:00.000Z"
+    },
+    {
+        "_id": {
+            "$oid": "67dc181b95658640edda0e3a"
+        },
+        "name": "Sarah Brown",
+        "image": "https://example.com/profiles/sarah.jpg",
+        "address": "987 Maple Avenue",
+        "country": "United States",
+        "city": "San Francisco",
+        "email": "sarah.brown@example.com",
+        "phone": "+1-555-345-6789",
+        "status": "Active",
+        "password": "$2a$10$0scZ4i9xdXH2H4l5XDEcp.4lwKRB5.0uEv1VfYKJtj/Xp7URg9o7y",
+        "role": "Manager",
+        "joiningDate": "2023-05-20T00:00:00.000Z"
+    },
+    {
+        "_id": {
+            "$oid": "67dc181b95658640edda0e3b"
+        },
+        "name": "David Lee",
+        "image": "https://example.com/profiles/david.jpg",
+        "address": "159 Cherry Lane",
+        "country": "Singapore",
+        "city": "Singapore",
+        "email": "david.lee@example.com",
+        "phone": "+65-6123-4567",
+        "status": "Active",
+        "password": "$2a$10$0scZ4i9xdXH2H4l5XDEcp.4lwKRB5.0uEv1VfYKJtj/Xp7URg9o7y",
+        "role": "Admin",
+        "joiningDate": "2023-06-10T00:00:00.000Z"
+    },
+    {
+        "_id": {
+            "$oid": "67dc181b95658640edda0e3c"
+        },
+        "name": "Lisa Wong",
+        "image": "https://example.com/profiles/lisa.jpg",
+        "address": "753 Beach Road",
+        "country": "Singapore",
+        "city": "Singapore",
+        "email": "lisa.wong@example.com",
+        "phone": "+65-6234-5678",
+        "status": "Active",
+        "password": "$2a$10$0scZ4i9xdXH2H4l5XDEcp.4lwKRB5.0uEv1VfYKJtj/Xp7URg9o7y",
+        "role": "Super Admin",
+        "joiningDate": "2023-02-28T00:00:00.000Z"
+    },
+    {
+        "_id": {
+            "$oid": "67dc181b95658640edda0e3d"
+        },
+        "name": "James Taylor",
+        "image": "https://example.com/profiles/james.jpg",
+        "address": "426 River Street",
+        "country": "United States",
+        "city": "Chicago",
+        "email": "james.taylor@example.com",
+        "phone": "+1-555-765-4321",
+        "status": "Inactive",
+        "password": "$2a$10$0scZ4i9xdXH2H4l5XDEcp.4lwKRB5.0uEv1VfYKJtj/Xp7URg9o7y",
+        "role": "Manager",
+        "joiningDate": "2023-07-05T00:00:00.000Z"
+    },
+    {
+        "_id": {
+            "$oid": "67dc181b95658640edda0e3e"
+        },
+        "name": "Maria Garcia",
+        "image": "https://example.com/profiles/maria.jpg",
+        "address": "824 Mountain View",
+        "country": "Spain",
+        "city": "Barcelona",
+        "email": "maria.garcia@example.com",
+        "phone": "+34-91-234-5678",
+        "status": "Active",
+        "password": "$2a$10$0scZ4i9xdXH2H4l5XDEcp.4lwKRB5.0uEv1VfYKJtj/Xp7URg9o7y",
+        "role": "Admin",
+        "joiningDate": "2023-03-15T00:00:00.000Z"
+    },
+    {
+        "_id": {
+            "$oid": "67dd3828608fa90e3d8c0633"
+        },
+        "name": "tranhuy",
+        "email": "huy@gmail.com",
+        "status": "Active",
+        "password": "$2a$10$0scZ4i9xdXH2H4l5XDEcp.4lwKRB5.0uEv1VfYKJtj/Xp7URg9o7y",
+        "role": "Super Admin",
+        "createdAt": {
+            "$date": "2025-03-21T09:58:00.502Z"
+        },
+        "updatedAt": {
+            "$date": "2025-03-21T09:58:00.502Z"
+        },
+        "__v": 0
+    }
+]

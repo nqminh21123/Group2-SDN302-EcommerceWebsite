@@ -4,11 +4,12 @@ const Product = require("../model/Products");
 
 // add product
 exports.addProduct = async (req, res, next) => {
+
   try {
     const firstItem = {
       color: {
-        name: "",
-        clrCode: "",
+        name: '',
+        clrCode: ''
       },
       img: req.body.img,
     };
@@ -17,7 +18,6 @@ exports.addProduct = async (req, res, next) => {
       ...req.body,
       imageURLs: imageURLs,
     });
-
     res.status(200).json({
       success: true,
       status: "success",
@@ -35,7 +35,7 @@ module.exports.addAllProducts = async (req, res, next) => {
   try {
     const result = await productServices.addAllProductService(req.body);
     res.json({
-      message: "Products added successfully",
+      message: 'Products added successfully',
       result,
     });
   } catch (error) {
@@ -50,7 +50,7 @@ exports.getAllProducts = async (req, res, next) => {
     res.status(200).json({
       success: true,
       data: result,
-    });
+    })
   } catch (error) {
     next(error);
   }
@@ -63,7 +63,7 @@ module.exports.getProductsByType = async (req, res, next) => {
     res.status(200).json({
       success: true,
       data: result,
-    });
+    })
   } catch (error) {
     console.log(error);
     next(error);
@@ -79,7 +79,7 @@ module.exports.getOfferTimerProducts = async (req, res, next) => {
     res.status(200).json({
       success: true,
       data: result,
-    });
+    })
   } catch (error) {
     next(error);
   }
@@ -94,7 +94,7 @@ module.exports.getPopularProductByType = async (req, res, next) => {
     res.status(200).json({
       success: true,
       data: result,
-    });
+    })
   } catch (error) {
     next(error);
   }
@@ -107,7 +107,7 @@ module.exports.getTopRatedProducts = async (req, res, next) => {
     res.status(200).json({
       success: true,
       data: result,
-    });
+    })
   } catch (error) {
     next(error);
   }
@@ -146,7 +146,7 @@ exports.getRelatedProducts = async (req, res, next) => {
     res.status(200).json({
       success: true,
       data: products,
-    });
+    })
   } catch (error) {
     next(error);
   }
@@ -155,10 +155,7 @@ exports.getRelatedProducts = async (req, res, next) => {
 // update product
 exports.updateProduct = async (req, res, next) => {
   try {
-    const product = await productServices.updateProductService(
-      req.params.id,
-      req.body
-    );
+    const product = await productServices.updateProductService(req.params.id, req.body)
     res.send({ data: product, message: "Product updated successfully!" });
   } catch (error) {
     next(error);
@@ -168,11 +165,11 @@ exports.updateProduct = async (req, res, next) => {
 // update product
 exports.reviewProducts = async (req, res, next) => {
   try {
-    const products = await productServices.getReviewsProducts();
+    const products = await productServices.getReviewsProducts(req.params.id);
     res.status(200).json({
       success: true,
       data: products,
-    });
+    })
   } catch (error) {
     next(error);
   }
@@ -185,7 +182,7 @@ exports.stockOutProducts = async (req, res, next) => {
     res.status(200).json({
       success: true,
       data: products,
-    });
+    })
   } catch (error) {
     next(error);
   }
@@ -196,8 +193,8 @@ exports.deleteProduct = async (req, res, next) => {
   try {
     await productServices.deleteProduct(req.params.id);
     res.status(200).json({
-      message: "Product delete successfully",
-    });
+      message: 'Product delete successfully'
+    })
   } catch (error) {
     next(error);
   }

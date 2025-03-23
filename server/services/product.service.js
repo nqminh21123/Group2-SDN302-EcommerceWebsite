@@ -19,7 +19,6 @@ exports.createProductService = async (data) => {
 
 // create all product service
 exports.addAllProductService = async (data) => {
-  await Product.deleteMany();
   const products = await Product.insertMany(data);
   for (const product of products) {
     await Brand.findByIdAndUpdate(product.brand.id, {
