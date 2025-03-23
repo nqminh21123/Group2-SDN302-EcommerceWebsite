@@ -21,6 +21,7 @@ const OrderList = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+  const [ordersPerPage] = useState(10);
 
   const handleStatusChange = async (orderId, newStatus) => {
     try {
@@ -43,9 +44,9 @@ const OrderList = () => {
         throw new Error("Failed to update order status.");
       }
 
-      console.log(`✅ Order ${orderId} updated to ${newStatus}`);
+      console.log(`Order ${orderId} updated to ${newStatus}`);
     } catch (error) {
-      console.error("❌ Error updating status:", error);
+      console.error(" Error updating status:", error);
 
       // Revert UI update if API request fails
       setOrders((prevOrders) =>
@@ -72,6 +73,14 @@ const OrderList = () => {
     fetchOrders();
   }, []);
 
+  const indexOfLastOrder = currentPage * ordersPerPage;
+  const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
+  const currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder);
+  const totalPages = Math.ceil(orders.length / ordersPerPage);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
   return (
     <Container fluid className="py-4">
       <Row className="mb-4">
@@ -95,7 +104,7 @@ const OrderList = () => {
               </tr>
             </thead>
             <tbody>
-              {orders.map((ord, index) => (
+              {currentOrders.map((ord, index) => (
                 <tr key={ord._id}>
                   <td>{`ORD_${index + 1}`}</td>
                   <td>{ord.name}</td>
@@ -104,6 +113,8 @@ const OrderList = () => {
                   <td>{ord.paymentMethod}</td>
                   <td>
                     <Form.Select
+                      variant="light"
+                      className="p-2 h-30 w-50"
                       value={ord.status}
                       onChange={(e) =>
                         handleStatusChange(ord._id, e.target.value)
@@ -123,6 +134,46 @@ const OrderList = () => {
             </tbody>
           </Table>
         </Card.Body>
+        <Card.Footer className="bg-white">
+          <Row className="align-items-center">
+            <Col>
+              <small className="text-muted">
+                Display: {currentOrders.length} orders
+              </small>
+            </Col>
+            <Col xs="auto">
+              <Pagination className="justify-content-center mt-3">
+                <Pagination.First
+                  onClick={() => handlePageChange(1)}
+                  disabled={currentPage === 1}
+                />
+                <Pagination.Prev
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                />
+
+                {[...Array(totalPages)].map((_, index) => (
+                  <Pagination.Item
+                    key={index + 1}
+                    active={index + 1 === currentPage}
+                    onClick={() => handlePageChange(index + 1)}
+                  >
+                    {index + 1}
+                  </Pagination.Item>
+                ))}
+
+                <Pagination.Next
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                />
+                <Pagination.Last
+                  onClick={() => handlePageChange(totalPages)}
+                  disabled={currentPage === totalPages}
+                />
+              </Pagination>
+            </Col>
+          </Row>
+        </Card.Footer>
       </Card>
     </Container>
   );
