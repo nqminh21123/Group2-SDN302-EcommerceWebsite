@@ -1,28 +1,27 @@
-import React, { useState, useEffect } from "react";
-import {
-  Navbar,
-  Nav,
-  Container,
-  Form,
-  Button,
-  Dropdown,
-  Badge,
-} from "react-bootstrap";
 import {
   Bell,
-  MessageSquare,
-  User,
-  Settings,
   LogOut,
   Menu,
-  X,
+  MessageSquare,
   Search,
-  LogIn,
+  Settings,
+  User,
+  X
 } from "lucide-react";
-import "./styles/Navbar.css";
-import { useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import {
+  Badge,
+  Button,
+  Container,
+  Dropdown,
+  Form,
+  Nav,
+  Navbar,
+} from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import { logout } from "../redux/slices/authSlice";
+import "./styles/Navbar.css";
 
 const DashboardNavbar = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -121,6 +120,9 @@ const DashboardNavbar = () => {
             </Nav.Link>
             <Nav.Link href="#" className="fw-medium px-3">
               Reports
+            </Nav.Link>
+            <Nav.Link href="/cloudinary" className="fw-medium px-3">
+              Cloudinary
             </Nav.Link>
           </Nav>
 
