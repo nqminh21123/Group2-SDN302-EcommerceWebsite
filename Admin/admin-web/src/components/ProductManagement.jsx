@@ -44,7 +44,6 @@ const ProductManagement = () => {
     setEditedProduct({ ...product });
   };
 
-  // Hàm xử lý khi lưu thay đổi
   const handleSave = () => {
     setProduct({ ...editedProduct });
     setIsEditing(false);
