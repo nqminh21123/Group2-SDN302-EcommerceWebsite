@@ -15,6 +15,7 @@ import DashboardNavbar from "./components/NavBar";
 import OrderList from "./components/Order";
 import ProductList from "./components/ProductList";
 import ProductManagement from "./components/ProductManagement";
+import CouponList from "./components/CouponList";
 
 function ProtectedRoute({ element }) {
   const auth = useSelector((state) => state.auth);
@@ -107,6 +108,19 @@ function App() {
                 element={
                   <MainContent>
                     <OrderList />
+                  </MainContent>
+                }
+              />
+            }
+          />
+
+          <Route
+            path="/coupon"
+            element={
+              <ProtectedRoute
+                element={
+                  <MainContent>
+                    <CouponList />
                   </MainContent>
                 }
               />
