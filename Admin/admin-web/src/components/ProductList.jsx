@@ -43,17 +43,9 @@ const ProductList = () => {
   const [priceRange, setPriceRange] = useState({ min: 0, max: 1000 });
   const [statusFilter, setStatusFilter] = useState("");
 
-  // Fetch products data
   useEffect(() => {
-    // In a real app, this would be an API call
-    // For now, we'll use sample data
     const fetchProducts = async () => {
       try {
-        // This would be your API endpoint in a real application
-        // const response = await fetch('/api/products');
-        // const data = await response.json();
-
-        // Using sample data for demonstration
         const res = await axios.get("http://localhost:9999/api/product/all");
         const data = res.data?.data;
         console.log(data);
@@ -61,7 +53,6 @@ const ProductList = () => {
         setProducts(data);
         setFilteredProducts(data);
 
-        // Extract unique categories and brands
         const uniqueCategories = [
           ...new Set(data.map((item) => item.category.name)),
         ];
@@ -79,11 +70,9 @@ const ProductList = () => {
     fetchProducts();
   }, []);
 
-  // Filter and sort products
   useEffect(() => {
     let result = [...products];
 
-    // Apply search filter
     if (searchTerm) {
       result = result.filter(
         (product) =>
@@ -92,30 +81,25 @@ const ProductList = () => {
       );
     }
 
-    // Apply category filter
     if (selectedCategory) {
       result = result.filter(
         (product) => product.category.name === selectedCategory
       );
     }
 
-    // Apply brand filter
     if (selectedBrand) {
       result = result.filter((product) => product.brand.name === selectedBrand);
     }
 
-    // Apply price range filter
     result = result.filter(
       (product) =>
         product.price >= priceRange.min && product.price <= priceRange.max
     );
 
-    // Apply status filter
     if (statusFilter) {
       result = result.filter((product) => product.status === statusFilter);
     }
 
-    // Apply sorting
     result.sort((a, b) => {
       if (sortField === "price") {
         return sortDirection === "asc" ? a.price - b.price : b.price - a.price;
@@ -147,7 +131,6 @@ const ProductList = () => {
     statusFilter,
   ]);
 
-  // Handle sort
   const handleSort = (field) => {
     const direction =
       field === sortField && sortDirection === "asc" ? "desc" : "asc";
@@ -155,7 +138,6 @@ const ProductList = () => {
     setSortDirection(direction);
   };
 
-  // Pagination logic
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
   const currentProducts = filteredProducts.slice(
@@ -164,10 +146,8 @@ const ProductList = () => {
   );
   const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
 
-  // Change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  // Reset all filters
   const resetFilters = () => {
     setSearchTerm("");
     setSelectedCategory("");
@@ -178,7 +158,6 @@ const ProductList = () => {
     setSortDirection("asc");
   };
 
-  // Handle product deletion
   const confirmDelete = (product) => {
     setProductToDelete(product);
     setShowDeleteModal(true);
@@ -186,7 +165,6 @@ const ProductList = () => {
 
   const deleteProduct = () => {
     if (productToDelete) {
-      // In a real app, this would be an API call
       setProducts(products.filter((p) => p._id !== productToDelete._id));
       setShowDeleteModal(false);
     }

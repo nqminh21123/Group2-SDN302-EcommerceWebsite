@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 import {
+  Route,
   BrowserRouter as Router,
   Routes,
-  Route,
   useNavigate,
 } from "react-router-dom";
-import { useSelector } from "react-redux";
-import ProductManagement from "./components/ProductManagement";
-import ProductList from "./components/ProductList";
-import Login from "./components/Login";
-import Dashboard from "./components/Dashboard";
-import DashboardNavbar from "./components/NavBar";
-import AddProduct from "./components/AddProduct";
 import "./AppLayout.css";
+import AddProduct from "./components/AddProduct";
+import Cloudinary from "./components/Cloudinary";
+import Dashboard from "./components/Dashboard";
+import Login from "./components/Login";
+import DashboardNavbar from "./components/NavBar";
 import OrderList from "./components/Order";
+import ProductList from "./components/ProductList";
+import ProductManagement from "./components/ProductManagement";
 
 function ProtectedRoute({ element }) {
   const auth = useSelector((state) => state.auth);
@@ -88,19 +89,29 @@ function App() {
             }
           />
           <Route
+            path="/cloudinary"
+            element={
+              <ProtectedRoute
+                element={
+                  <MainContent>
+                    <Cloudinary />
+                  </MainContent>
+                }
+              />
+            }
+          />
+          <Route
             path="/orders"
             element={
               <ProtectedRoute
                 element={
                   <MainContent>
-                    <OrderList/>
+                    <OrderList />
                   </MainContent>
-
                 }
               />
             }
           />
-            
         </Routes>
       </div>
     </Router>

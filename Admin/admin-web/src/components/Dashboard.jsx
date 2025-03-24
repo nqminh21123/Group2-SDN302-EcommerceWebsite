@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {
   Navbar,
@@ -28,8 +28,62 @@ import {
   Pie,
   Cell,
 } from "recharts";
+import axios from "axios";
 
 const Dashboard = () => {
+  const [orders, setOrders] = useState([]);
+  const [stats, setStats] = useState({
+    totalOrders: 0,
+    totalRevenue: 0,
+    pendingOrders: 0,
+    deliveredOrders: 0,
+  });
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const res = await axios.get("http://localhost:9999/api/order/orders");
+        const data = res.data?.data;
+        setOrders(data);
+        calculateStats(data);
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+      }
+    };
+    fetchOrders();
+  }, []);
+
+  const calculateStats = (orderData) => {
+    const totalOrders = orderData.length;
+    const totalRevenue = orderData.reduce(
+      (sum, order) => sum + order.totalAmount,
+      0
+    );
+    const pendingOrders = orderData.filter(
+      (order) => order.status.toLowerCase() === "pending"
+    ).length;
+    const deliveredOrders = orderData.filter(
+      (order) => order.status.toLowerCase() === "delivered"
+    ).length;
+
+    setStats({
+      totalOrders,
+      totalRevenue,
+      pendingOrders,
+      deliveredOrders,
+    });
+  };
+
+  const getRecentOrders = () => {
+    return orders.slice(0, 5).map((order) => ({
+      id: `#${order.invoice}`,
+      customer: order.name,
+      status: order.status,
+      date: new Date(order.createdAt || Date.now()).toLocaleDateString(),
+      amount: `$${order.totalAmount.toFixed(2)}`,
+    }));
+  };
+
   const salesData = [
     { name: "Jan", sales: 4000, profit: 2400 },
     { name: "Feb", sales: 3000, profit: 1398 },
@@ -39,45 +93,57 @@ const Dashboard = () => {
     { name: "Jun", sales: 2390, profit: 3800 },
   ];
 
-  const pieData = [
-    { name: "Product A", value: 400 },
-    { name: "Product B", value: 300 },
-    { name: "Product C", value: 300 },
-    { name: "Product D", value: 200 },
-  ];
+  const processOrdersForPieChart = (orders) => {
+    const productCounts = {};
+
+    orders.forEach((order) => {
+      if (order.cart && Array.isArray(order.cart)) {
+        order.cart.forEach((item) => {
+          const productName = item.title || "Unknown Product";
+          const quantity = item.orderQuantity || 1;
+
+          if (productCounts[productName]) {
+            productCounts[productName] += quantity;
+          } else {
+            productCounts[productName] = quantity;
+          }
+        });
+      }
+    });
+
+    const pieData = Object.keys(productCounts).map((productName) => ({
+      name: productName,
+      value: productCounts[productName],
+    }));
+
+    pieData.sort((a, b) => b.value - a.value);
+
+    if (pieData.length > 5) {
+      const topProducts = pieData.slice(0, 4);
+      const otherProducts = pieData.slice(4);
+
+      const otherProductsValue = otherProducts.reduce(
+        (total, product) => total + product.value,
+        0
+      );
+
+      topProducts.push({
+        name: "Các sản phẩm khác",
+        value: otherProductsValue,
+      });
+
+      return topProducts;
+    }
+
+    return pieData;
+  };
+
+  const pieData = processOrdersForPieChart(orders);
 
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
-  const recentOrders = [
-    {
-      id: "#ORD-001",
-      customer: "John Doe",
-      status: "Delivered",
-      date: "15 Mar 2025",
-      amount: "$120.00",
-    },
-    {
-      id: "#ORD-002",
-      customer: "Jane Smith",
-      status: "Processing",
-      date: "14 Mar 2025",
-      amount: "$85.50",
-    },
-    {
-      id: "#ORD-003",
-      customer: "Bob Johnson",
-      status: "Pending",
-      date: "13 Mar 2025",
-      amount: "$340.20",
-    },
-    {
-      id: "#ORD-004",
-      customer: "Alice Brown",
-      status: "Delivered",
-      date: "12 Mar 2025",
-      amount: "$212.75",
-    },
-  ];
+  const recentOrders = getRecentOrders();
+  console.log(recentOrders);
 
   return (
     <div className="dashboard">
@@ -91,7 +157,7 @@ const Dashboard = () => {
             <Card className="mb-4">
               <Card.Body>
                 <Card.Title>Total Revenue</Card.Title>
-                <h2>$24,568</h2>
+                <h2>${stats.totalRevenue.toFixed(2)}</h2>
                 <div className="text-success">+12.5% from last month</div>
               </Card.Body>
             </Card>
@@ -100,7 +166,7 @@ const Dashboard = () => {
             <Card className="mb-4">
               <Card.Body>
                 <Card.Title>Total Orders</Card.Title>
-                <h2>1,286</h2>
+                <h2>{stats.totalOrders}</h2>
                 <div className="text-success">+5.3% from last month</div>
               </Card.Body>
             </Card>
@@ -108,8 +174,8 @@ const Dashboard = () => {
           <Col md={3}>
             <Card className="mb-4">
               <Card.Body>
-                <Card.Title>New Customers</Card.Title>
-                <h2>128</h2>
+                <Card.Title>Order Pending</Card.Title>
+                <h2>{stats.pendingOrders}</h2>
                 <div className="text-danger">-2.7% from last month</div>
               </Card.Body>
             </Card>
@@ -117,8 +183,8 @@ const Dashboard = () => {
           <Col md={3}>
             <Card className="mb-4">
               <Card.Body>
-                <Card.Title>Customer Satisfaction</Card.Title>
-                <h2>94.2%</h2>
+                <Card.Title>Order completed</Card.Title>
+                <h2>{stats.deliveredOrders}</h2>
                 <div className="text-success">+1.2% from last month</div>
               </Card.Body>
             </Card>
