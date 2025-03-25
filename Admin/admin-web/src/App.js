@@ -9,13 +9,13 @@ import {
 import "./AppLayout.css";
 import AddProduct from "./components/AddProduct";
 import Cloudinary from "./components/Cloudinary";
+import CouponList from "./components/CouponList";
 import Dashboard from "./components/Dashboard";
 import Login from "./components/Login";
 import DashboardNavbar from "./components/NavBar";
 import OrderList from "./components/Order";
 import ProductList from "./components/ProductList";
 import ProductManagement from "./components/ProductManagement";
-import CouponList from "./components/CouponList";
 
 function ProtectedRoute({ element }) {
   const auth = useSelector((state) => state.auth);

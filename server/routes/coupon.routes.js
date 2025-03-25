@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const {
   addCoupon,
-  addAllCoupon,
+  // addAllCoupon,
   getAllCoupons,
   getCouponById,
   updateCoupon,
@@ -13,7 +13,7 @@ const {
 router.post('/add', addCoupon);
 
 //add multiple coupon
-router.post('/all', addAllCoupon);
+// router.post('/all', addAllCoupon);
 
 //get all coupon
 router.get('/', getAllCoupons);

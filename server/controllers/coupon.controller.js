@@ -69,7 +69,7 @@ const deleteCoupon = async (req, res, next) => {
 
 module.exports = {
   addCoupon,
-  addAllCoupon,
+  // addAllCoupon,
   getAllCoupons,
   getCouponById,
   updateCoupon,

@@ -1,33 +1,33 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import {
-  Form,
   Button,
-  Container,
-  Row,
-  Col,
   Card,
+  Col,
+  Container,
+  Form,
   InputGroup,
+  Row,
   Spinner,
 } from "react-bootstrap";
 import {
-  FaTag,
   FaBarcode,
-  FaDollarSign,
-  FaPercent,
   FaBoxes,
-  FaInfo,
-  FaList,
-  FaTags,
-  FaChartLine,
-  FaPalette,
-  FaImage,
-  FaPlus,
-  FaTrash,
   FaCheck,
-  FaUpload,
+  FaDollarSign,
+  FaImage,
+  FaInfo,
+  FaLink,
+  FaList,
+  FaPalette,
+  FaPercent,
+  FaPlus,
   FaSpeakap,
+  FaTag,
+  FaTags,
   FaThList,
+  FaTrash,
+  FaUpload
 } from "react-icons/fa";
 
 const AddProduct = () => {
@@ -89,6 +89,7 @@ const AddProduct = () => {
   const [colorValue, setColorValue] = useState("");
   const [productImage, setProductImage] = useState(null);
   const [productImageUrl, setProductImageUrl] = useState("");
+  const [productImageUrlInput, setProductImageUrlInput] = useState("");
   const [isUploadingProduct, setIsUploadingProduct] = useState(false);
 
   const handleInputChange = (e) => {
@@ -241,6 +242,58 @@ const AddProduct = () => {
     }
   };
 
+  const handleProductImageUrlChange = (e) => {
+    setProductImageUrlInput(e.target.value);
+  };
+
+  const handleUploadProductImageUrl = () => {
+    if (!productImageUrlInput) {
+      alert("Please enter an image URL");
+      return;
+    }
+
+    setIsUploadingProduct(true);
+
+    // Validate image URL
+    const tempImg = new Image();
+    tempImg.onload = () => {
+      setProductImageUrl(productImageUrlInput);
+      setProduct({ ...product, img: productImageUrlInput });
+      alert("Product image URL uploaded successfully!");
+      setIsUploadingProduct(false);
+    };
+    tempImg.onerror = () => {
+      alert("Invalid image URL. Please check the link.");
+      setIsUploadingProduct(false);
+    };
+    tempImg.src = productImageUrlInput;
+  };
+
+  const handleColorImgUrlChange = (index, url) => {
+    const updatedColors = [...product.imageURLs];
+    updatedColors[index].img = url;
+    delete updatedColors[index].file;
+    setProduct({ ...product, imageURLs: updatedColors });
+  };
+
+  const handleColorImageUrlUpload = (index) => {
+    const colorItem = product.imageURLs[index];
+    if (!colorItem.img) {
+      alert("Please enter an image URL");
+      return;
+    }
+
+    // Validate image URL
+    const tempImg = new Image();
+    tempImg.onload = () => {
+      alert("Color image URL uploaded successfully!");
+    };
+    tempImg.onerror = () => {
+      alert("Invalid image URL. Please check the link.");
+    };
+    tempImg.src = colorItem.img;
+  };
+
   const handleRemoveColor = (index) => {
     const updatedColors = [...product.imageURLs];
     updatedColors.splice(index, 1);
@@ -274,8 +327,7 @@ const AddProduct = () => {
     for (let i = 0; i < product.imageURLs.length; i++) {
       if (product.imageURLs[i].file && !product.imageURLs[i].img) {
         alert(
-          `Please upload the image for ${
-            product.imageURLs[i].color.name || "unnamed color"
+          `Please upload the image for ${product.imageURLs[i].color.name || "unnamed color"
           } before submitting`
         );
         return false;
@@ -415,47 +467,82 @@ const AddProduct = () => {
                     <FaImage className="me-2" />
                     Image
                   </Form.Label>
-                  <InputGroup>
-                    <Form.Control
-                      type="file"
-                      onChange={handleProductImageChange}
-                    />
-                    <Button
-                      variant="outline-primary"
-                      onClick={handleUploadProductImage}
-                      disabled={isUploadingProduct || !productImage}
-                    >
-                      {isUploadingProduct ? (
-                        <Spinner
-                          as="span"
-                          animation="border"
-                          size="sm"
-                          role="status"
-                          aria-hidden="true"
+                  <Card className="p-3">
+                    <Row>
+                      <Col md={6}>
+                        <InputGroup className="mb-2">
+                          <Form.Control
+                            type="file"
+                            onChange={handleProductImageChange}
+                          />
+                          <Button
+                            variant="outline-primary"
+                            onClick={handleUploadProductImage}
+                            disabled={isUploadingProduct || !productImage}
+                          >
+                            {isUploadingProduct ? (
+                              <Spinner
+                                as="span"
+                                animation="border"
+                                size="sm"
+                                role="status"
+                                aria-hidden="true"
+                              />
+                            ) : (
+                              <>
+                                <FaUpload className="me-1" /> Upload File
+                              </>
+                            )}
+                          </Button>
+                        </InputGroup>
+                      </Col>
+                      <Col md={6}>
+                        <InputGroup>
+                          <Form.Control
+                            type="text"
+                            placeholder="Or paste image URL"
+                            value={productImageUrlInput}
+                            onChange={handleProductImageUrlChange}
+                          />
+                          <Button
+                            variant="outline-secondary"
+                            onClick={handleUploadProductImageUrl}
+                            disabled={isUploadingProduct || !productImageUrlInput}
+                          >
+                            {isUploadingProduct ? (
+                              <Spinner
+                                as="span"
+                                animation="border"
+                                size="sm"
+                                role="status"
+                                aria-hidden="true"
+                              />
+                            ) : (
+                              <>
+                                <FaLink className="me-1" /> URL
+                              </>
+                            )}
+                          </Button>
+                        </InputGroup>
+                      </Col>
+                    </Row>
+                    {productImageUrl && (
+                      <div className="mt-2">
+                        <img
+                          src={productImageUrl}
+                          alt="Product Preview"
+                          style={{ maxHeight: "100px" }}
+                          className="border p-1"
                         />
-                      ) : (
-                        <>
-                          <FaUpload className="me-1" /> Upload
-                        </>
-                      )}
-                    </Button>
-                  </InputGroup>
-                  {productImageUrl && (
-                    <div className="mt-2">
-                      <img
-                        src={productImageUrl}
-                        alt="Product Preview"
-                        style={{ maxHeight: "100px" }}
-                        className="border p-1"
-                      />
-                      <div className="mt-1">
-                        <small className="text-success">
-                          <FaCheck className="me-1" />
-                          Image Uploaded
-                        </small>
+                        <div className="mt-1">
+                          <small className="text-success">
+                            <FaCheck className="me-1" />
+                            Image Uploaded
+                          </small>
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
+                  </Card>
                 </Form.Group>
 
                 {/* Title */}
@@ -732,12 +819,32 @@ const AddProduct = () => {
                           />
                           <small>{item.color.name}</small>
                         </Col>
-                        <Col sm={5}>
-                          <Form.Control
-                            type="file"
-                            onChange={(e) => handleColorImgChange(index, e)}
-                            size="sm"
-                          />
+                        <Col sm={4}>
+                          <InputGroup>
+                            <Form.Control
+                              type="file"
+                              onChange={(e) => handleColorImgChange(index, e)}
+                              size="sm"
+                            />
+                            <Button
+                              variant="outline-primary"
+                              size="sm"
+                              onClick={() => handleUploadSingleImage(index)}
+                              disabled={isUploading && uploadingIndex === index}
+                            >
+                              {isUploading && uploadingIndex === index ? (
+                                <Spinner
+                                  as="span"
+                                  animation="border"
+                                  size="sm"
+                                  role="status"
+                                  aria-hidden="true"
+                                />
+                              ) : (
+                                <FaUpload />
+                              )}
+                            </Button>
+                          </InputGroup>
                           {item.img && (
                             <div className="mt-1">
                               <small className="text-success">
@@ -747,26 +854,37 @@ const AddProduct = () => {
                             </div>
                           )}
                         </Col>
-                        <Col sm={2}>
-                          <Button
-                            variant="outline-primary"
-                            size="sm"
-                            onClick={() => handleUploadSingleImage(index)}
-                            disabled={isUploading && uploadingIndex === index}
-                            className="w-100"
-                          >
-                            {isUploading && uploadingIndex === index ? (
-                              <Spinner
-                                as="span"
-                                animation="border"
-                                size="sm"
-                                role="status"
-                                aria-hidden="true"
-                              />
-                            ) : (
-                              <FaImage />
-                            )}
-                          </Button>
+                        <Col sm={3}>
+                          <InputGroup>
+                            <Form.Control
+                              type="text"
+                              placeholder="Or paste image URL"
+                              value={item.img || ''}
+                              onChange={(e) => {
+                                const updatedColors = [...product.imageURLs];
+                                updatedColors[index].img = e.target.value;
+                                setProduct({ ...product, imageURLs: updatedColors });
+                              }}
+                              size="sm"
+                            />
+                            <Button
+                              variant="outline-secondary"
+                              size="sm"
+                              onClick={() => {
+                                // Validate image URL
+                                const tempImg = new Image();
+                                tempImg.onload = () => {
+                                  alert("Image URL is valid!");
+                                };
+                                tempImg.onerror = () => {
+                                  alert("Invalid image URL. Please check the link.");
+                                };
+                                tempImg.src = item.img;
+                              }}
+                            >
+                              <FaLink />
+                            </Button>
+                          </InputGroup>
                         </Col>
                         <Col sm={2}>
                           <Button
