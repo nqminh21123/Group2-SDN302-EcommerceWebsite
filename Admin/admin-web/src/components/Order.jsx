@@ -13,7 +13,7 @@ import {
   Badge,
   Dropdown,
 } from "react-bootstrap";
-
+import { FaSearch } from "react-icons/fa";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
@@ -22,7 +22,8 @@ const OrderList = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [ordersPerPage] = useState(10);
-
+  const [showModal, setShowModal] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
   const handleStatusChange = async (orderId, newStatus) => {
     try {
       // Optimistically update UI
@@ -81,6 +82,18 @@ const OrderList = () => {
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
+
+  const handleShowModal = (order) => {
+    setSelectedOrder(order);
+    setShowModal(true);
+  };
+
+  // Handle closing modal
+  const handleCloseModal = () => {
+    setSelectedOrder(null);
+    setShowModal(false);
+  };
+
   return (
     <Container fluid className="py-4">
       <Row className="mb-4">
@@ -101,6 +114,7 @@ const OrderList = () => {
                 <th>Shipping Cost</th>
                 <th>Payment Method</th>
                 <th>Status</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -128,6 +142,16 @@ const OrderList = () => {
                         )
                       )}
                     </Form.Select>
+                  </td>
+                  <td>
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      onClick={() => handleShowModal(ord)}
+                    >
+                      <FaSearch className="me-2 mb-1" />
+                      View Details
+                    </Button>
                   </td>
                 </tr>
               ))}
@@ -175,6 +199,88 @@ const OrderList = () => {
           </Row>
         </Card.Footer>
       </Card>
+
+      {/* Order Details Modal */}
+      <Modal show={showModal} onHide={handleCloseModal} size="md" centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Order Details</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {selectedOrder && (
+            <div>
+              <p>
+                <strong>Order ID:</strong> ORD#{selectedOrder.invoice}
+              </p>
+              <p>
+                <strong>Name:</strong> {selectedOrder.name}
+              </p>
+              <p>
+                <strong>Email:</strong> {selectedOrder.email}
+              </p>
+              <p>
+                <strong>Contact:</strong> {selectedOrder.contact}
+              </p>
+              <p>
+                <strong>Address:</strong> {selectedOrder.address},{" "}
+                {selectedOrder.city}, {selectedOrder.country}
+              </p>
+              <p>
+                <strong>Zip Code:</strong> {selectedOrder.zipCode}
+              </p>
+              <p>
+                <strong>Payment Method:</strong> {selectedOrder.paymentMethod}
+              </p>
+              <p>
+                <strong>Shipping Cost:</strong> ${selectedOrder.shippingCost}
+              </p>
+              <p>
+                <strong>Total Amount:</strong> ${selectedOrder.totalAmount}
+              </p>
+              <p>
+                <strong>Order Note:</strong>{" "}
+                {selectedOrder.orderNote || "No note provided"}
+              </p>
+              <p>
+                <strong>Status:</strong> {selectedOrder.status}
+              </p>
+              <h5 className="mt-3">Cart Items:</h5>
+              <Table striped bordered hover size="sm">
+                <thead>
+                  <tr>
+                    <th>Image</th>
+                    <th>Product Name</th>
+                    <th>Price</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {selectedOrder.cart.map((item, index) => (
+                    <tr key={index}>
+                      <td>
+                        <img
+                          src={item.img}
+                          alt={item.title || "Product image"}
+                          style={{
+                            width: "50px",
+                            height: "50px",
+                            objectFit: "cover",
+                          }}
+                        />
+                      </td>
+                      <td>{item.title}</td>
+                      <td>${item.price}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            </div>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 };

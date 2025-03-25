@@ -7,6 +7,7 @@ import {
   Settings,
   User,
   X,
+  X,
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import {
