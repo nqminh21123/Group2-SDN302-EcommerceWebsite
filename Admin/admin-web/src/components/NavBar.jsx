@@ -6,7 +6,7 @@ import {
   Search,
   Settings,
   User,
-  X
+  X,
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import {
@@ -123,6 +123,9 @@ const DashboardNavbar = () => {
             </Nav.Link>
             <Nav.Link href="/cloudinary" className="fw-medium px-3">
               Cloudinary
+            </Nav.Link>
+            <Nav.Link href="/user" className="fw-medium px-3">
+              User
             </Nav.Link>
           </Nav>
 
