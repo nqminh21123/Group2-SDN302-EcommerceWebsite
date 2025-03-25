@@ -16,6 +16,7 @@ import OrderList from "./components/Order";
 import ProductList from "./components/ProductList";
 import ProductManagement from "./components/ProductManagement";
 import UserList from "./components/UserList";
+import CouponList from "./components/CouponList";
 
 function ProtectedRoute({ element }) {
   const auth = useSelector((state) => state.auth);
@@ -96,6 +97,18 @@ function App() {
                 element={
                   <MainContent>
                     <Cloudinary />
+                  </MainContent>
+                }
+              />
+            }
+          />
+          <Route
+            path="/coupon"
+            element={
+              <ProtectedRoute
+                element={
+                  <MainContent>
+                    <CouponList />
                   </MainContent>
                 }
               />
