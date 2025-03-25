@@ -16,6 +16,7 @@ import DashboardNavbar from "./components/NavBar";
 import OrderList from "./components/Order";
 import ProductList from "./components/ProductList";
 import ProductManagement from "./components/ProductManagement";
+import UserList from "./components/UserList";
 
 function ProtectedRoute({ element }) {
   const auth = useSelector((state) => state.auth);
@@ -102,6 +103,18 @@ function App() {
             }
           />
           <Route
+            path="/coupon"
+            element={
+              <ProtectedRoute
+                element={
+                  <MainContent>
+                    <CouponList />
+                  </MainContent>
+                }
+              />
+            }
+          />
+          <Route
             path="/orders"
             element={
               <ProtectedRoute
@@ -113,14 +126,13 @@ function App() {
               />
             }
           />
-
           <Route
-            path="/coupon"
+            path="/user"
             element={
               <ProtectedRoute
                 element={
                   <MainContent>
-                    <CouponList />
+                    <UserList />
                   </MainContent>
                 }
               />

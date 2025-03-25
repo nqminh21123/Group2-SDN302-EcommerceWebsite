@@ -127,6 +127,9 @@ const DashboardNavbar = () => {
             <Nav.Link href="/coupon" className="fw-medium px-3">
               Coupon
             </Nav.Link>
+            <Nav.Link href="/user" className="fw-medium px-3">
+              User
+            </Nav.Link>
           </Nav>
 
           <div className="d-flex align-items-center">
